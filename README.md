@@ -2,7 +2,7 @@
 
 A pomodoro app built with Next.js 13, Typescript, Radix UI Primitives (via [shadcn](https://github.com/shadcn/ui)), and Tailwind CSS.
 
-## TODO
+## Todo
 
 - [ ] Timer functionality
 - [ ] Options for focus time, short break, long break
