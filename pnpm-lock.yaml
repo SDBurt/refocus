@@ -40,6 +40,7 @@ specifiers:
   eslint-config-prettier: ^8.3.0
   eslint-plugin-react: ^7.31.11
   eslint-plugin-tailwindcss: ^3.8.0
+  lodash: ^4.17.21
   lucide-react: 0.105.0-alpha.4
   next: ^13.1.6
   next-themes: ^0.2.1
@@ -83,6 +84,7 @@ dependencies:
   '@radix-ui/react-tooltip': 1.0.3_5ndqzdd6t4rivxsukjv3i3ak2q
   class-variance-authority: 0.4.0_typescript@4.9.4
   clsx: 1.2.1
+  lodash: 4.17.21
   lucide-react: 0.105.0-alpha.4_react@18.2.0
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
   next-themes: 0.2.1_3vryta7zmbcsw4rrqf4axjqggm
@@ -2966,6 +2968,10 @@ packages:
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
+
+  /lodash/4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
 
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
