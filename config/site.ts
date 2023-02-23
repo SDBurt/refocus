@@ -23,6 +23,10 @@ export const siteConfig: SiteConfig = {
       title: "Development Playground",
       href: "/playground",
     },
+    {
+      title: "Pomodoro",
+      href: "/pomodoro",
+    },
   ],
   links: {
     twitter: "https://twitter.com/sdburt",
