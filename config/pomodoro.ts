@@ -1,4 +1,12 @@
-export const stateFlow = {
+export type StateFlowType = {
+  label: string
+  description: string
+  next: string
+  defaultTime: number
+  color: string
+}
+
+export const stateFlow: { [key: string]: StateFlowType } = {
   pomodoro: {
     label: "Pomodoro",
     description: "Focus session",

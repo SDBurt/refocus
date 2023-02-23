@@ -22,10 +22,6 @@ export default function PomodoroPage() {
     }
   )
 
-  useEffect(() => {
-    console.log("USEEFFECT: ", settings)
-  }, [settings])
-
   return (
     <Layout>
       <Head>

@@ -65,6 +65,9 @@ export default function PomodoroClock({settings}) {
 
           clearInterval(interval);
           onTimerComplete()
+          if (settings["autoStartTimer"]) {
+            startTimer()
+          }
         }
       }
     }, 1000);
