@@ -19,10 +19,10 @@ export const siteConfig: SiteConfig = {
       title: "Home",
       href: "/",
     },
-    {
-      title: "Development Playground",
-      href: "/playground",
-    },
+    // {
+    //   title: "Development Playground",
+    //   href: "/playground",
+    // },
     {
       title: "Pomodoro",
       href: "/pomodoro",

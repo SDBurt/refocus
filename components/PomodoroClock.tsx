@@ -78,11 +78,11 @@ export default function PomodoroClock({settings}) {
     <div className="flex flex-col space-y-2">
 
           {/* Title */}
-          <div className="font-semibold text-4xl text-slate-700 dark:text-slate-400">
+          <div className="text-4xl font-semibold text-slate-700 dark:text-slate-400">
             {stateFlow[flowState].label}
           </div>
           {/* Subtitle with details */}
-          <div className="font-semibold text-md text-slate-800 dark:text-slate-600">
+          <div className="text-md font-semibold text-slate-800 dark:text-slate-600">
             <p className="text-sm text-slate-500 dark:text-slate-400">
               {stateFlow[flowState].description}
             </p>
@@ -91,7 +91,7 @@ export default function PomodoroClock({settings}) {
             </p>
           </div>
           {/* Clock */}
-          <div className="font-semibold text-8xl text-slate-700 dark:text-slate-400">
+          <div className="text-8xl font-semibold text-slate-700 dark:text-slate-400">
             {makeClock(time)}
           </div>
 

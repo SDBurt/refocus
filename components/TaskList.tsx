@@ -36,10 +36,10 @@ const CustomList = () => {
   }
 
   return (
-    <div className="flex flex-col gap-2 border p-2 w-full">
+    <div className="flex w-full flex-col gap-2 border p-2">
           
       <form onSubmit={(e) => onSubmitHandler(e)}>
-        <div className="flex flex-row justify-center items-center space-x-3 p-2">
+        <div className="flex flex-row items-center justify-center space-x-3 p-2">
             <Label htmlFor="newTask">New Task</Label>
             <Input type="text" id="newTask" placeholder="New Task Description"/>
             <Button type="submit">Add</Button>
@@ -47,7 +47,7 @@ const CustomList = () => {
       </form>
     
       {tasks && tasks.length > 0 && tasks.map((task, index) => (
-        <div key={`task-${index}`} className="flex flex-row justify-between items-center space-x-3 p-2 border rounded">
+        <div key={`task-${index}`} className="flex flex-row items-center justify-between space-x-3 rounded border p-2">
   
           <Checkbox
             name={`task-${index}`}

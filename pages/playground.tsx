@@ -2,7 +2,6 @@ import Head from "next/head"
 
 import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
-import PomodoroClock from "@/components/PomodoroClock"
 import TaskList from "@/components/TaskList"
 
 export default function PlaygroundPage() {
@@ -19,9 +18,8 @@ export default function PlaygroundPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <section className="container items-center gap-6 pt-6 pb-8 md:py-10 max-w-[980px]">
-        <div className="flex flex-col gap-2 items-center space-y-8 justify-center">
-          <PomodoroClock />
+      <section className="container max-w-[980px] items-center gap-6 pt-6 pb-8 md:py-10">
+        <div className="flex flex-col items-center justify-center gap-2 space-y-8">
           <TaskList />
         </div>
       </section>
