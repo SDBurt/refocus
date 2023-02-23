@@ -5,6 +5,7 @@ import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button"
+import NavDropdown from "@/components/nav-dropdown"
 
 export function SiteHeader() {
   return (
@@ -46,6 +47,7 @@ export function SiteHeader() {
               </div>
             </Link>
             <ThemeToggle />
+            <NavDropdown />
           </nav>
         </div>
       </div>
