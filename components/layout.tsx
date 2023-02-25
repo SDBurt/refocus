@@ -1,5 +1,3 @@
-import { SiteHeader } from "@/components/site-header"
-
 interface LayoutProps {
   children: React.ReactNode
 }
@@ -7,8 +5,9 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   return (
     <>
-      <SiteHeader />
-      <main>{children}</main>
+      <main>
+        <div className="flex justify-center items-center w-screen h-screen">{children}</div>
+      </main>
     </>
   )
 }
