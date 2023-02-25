@@ -37,25 +37,7 @@ export default function PomodoroPage() {
       <section className="container max-w-[980px] items-center gap-6 pt-6 pb-8 md:py-10">
         <div className="flex flex-col items-center justify-center gap-2 space-y-8">
           
-          
-        <Tabs defaultValue="pomodoro" className="w-[680px]">
-        <TabsList>
-          <TabsTrigger value="pomodoro">Pomodoro</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="pomodoro">
-          <div className="flex flex-col space-y-8">
-            <PomodoroClock settings={settings}/>
-          </div>
-
-
-        </TabsContent>
-        
-        <TabsContent value="settings">
-          <SettingsForm settings={settings} setSettings={setSettings}/>
-        </TabsContent>
-      </Tabs>
+          <PomodoroClock settings={settings}/>
 
         </div>
       </section>

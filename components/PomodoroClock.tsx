@@ -28,16 +28,28 @@ export default function PomodoroClock({settings}) {
   const [timerRunning, setTimerRunning] = useState(false)
   const [flowState, setFlowState] = useState<FlowStateType>(defaultState)
   const [numPomosBeforeLongBreak, setNumPomosBeforeLongBreak] = useState(defaultPomoIntervals)
+  
+  const [distracted, setDistracted] = useState([])
 
   const resetTimer = () => {
     setTimerRunning(false)
     setTime(parseInt(settings[flowState])*60)
+    setDistracted([])
   }
   const stopTimer = () => {
     setTimerRunning(false)
   }
   const startTimer = () => {
     setTimerRunning(true)
+  }
+
+  const newFlowState = (state) => {
+    setFlowState(state)
+    setTime(parseInt(settings[state])*60)
+  }
+
+  const signalDistracted = () => {
+    setDistracted(prev => ([...prev, time]))
   }
 
   const onTimerComplete = () => {
@@ -75,39 +87,60 @@ export default function PomodoroClock({settings}) {
   }, [timerRunning, time]);
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-6 items-center">
+
+          <div className="flex flex-row space-x-2">
+            <Button variant={flowState === "pomodoro" ? "default" : "outline"} onClick={() => newFlowState("pomodoro")}>Pomodoro</Button>
+            <Button variant={flowState === "shortBreak" ? "default" : "outline"} onClick={() => newFlowState("shortBreak")}>Short Break</Button>
+            <Button variant={flowState === "longBreak" ? "default" : "outline"} onClick={() => newFlowState("longBreak")}>Long Break</Button>
+          </div>
 
           {/* Title */}
-          <div className="text-4xl font-semibold text-slate-700 dark:text-slate-400">
-            {stateFlow[flowState].label}
-          </div>
+          
           {/* Subtitle with details */}
           <div className="text-md font-semibold text-slate-800 dark:text-slate-600">
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            {/* <p className="text-sm text-slate-500 dark:text-slate-400">
               {stateFlow[flowState].description}
-            </p>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-            long break in {numPomosBeforeLongBreak} pomodoros
-            </p>
+            </p> */}
+            {/* <p className="text-sm text-slate-500 dark:text-slate-400">
+              long break in {numPomosBeforeLongBreak} pomodoros
+            </p> */}
           </div>
+
           {/* Clock */}
           <div className="text-8xl font-semibold text-slate-700 dark:text-slate-400">
+            <div className="text-center text-4xl font-semibold text-slate-700 dark:text-slate-400">
+              {stateFlow[flowState].label}
+            </div>
             {makeClock(time)}
           </div>
 
           {/* Button Group */}
           <div className="flex gap-2">
+            
             {
               !timerRunning ? (
                 <>
                   <Button onClick={() => startTimer()}>Start Timer</Button>
-                  <Button variant="outline" onClick={() => resetTimer()}>Reset Timer</Button>
+                  <Button variant="outline" onClick={() => resetTimer()}>Reset</Button>
                 </>
               ) : (
-                  <Button onClick={() => stopTimer()}>Stop Timer</Button>
+                <>
+                  {flowState === "pomodoro" ? <Button variant="default" onClick={() => signalDistracted()}>Distracted</Button> : null }
+                  <Button variant="outline" onClick={() => stopTimer()}>Stop Timer</Button>
+                </>
               )
             }
           </div>
+          {distracted && distracted.length > 0 ? <div className="flex flex-row space-x-2 max-w-screen-sm p-2 overflow-x-auto">
+            {distracted.map(t => {
+              return (
+                <div className="p-2 border rounded-md border-gray-500">
+                  {makeClock(t)}
+                </div>
+                )
+            })}
+          </div> : null}
 
           </div>
   )
