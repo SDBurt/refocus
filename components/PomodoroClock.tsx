@@ -20,23 +20,6 @@ const makeClock = (t: number) => {
 }
 
 
-const sortEpochs = (epochs: number[]): number[] => {
-  return epochs.sort((n1,n2) => n1 - n2);
-}
-
-const averageDifference = (sortedEpochs: number[]): number => {
-
-  const num_epochs = sortedEpochs.length
-
-  for (let i = 0; i < num_epochs-1; i++) {
-    const diff = sortedEpochs[i+1] - sortedEpochs[i]
-
-  }
-
-  return 0
-}
-
-
 export default function PomodoroClock({settings}) {
 
   // Timer
@@ -71,21 +54,15 @@ export default function PomodoroClock({settings}) {
     // const newDistracted = [...distracted, time]
     const distractedLen = distracted.length
 
-    console.log("First: ", time, avgDiff,  distractedLen)
-
     if (distractedLen > 1) {
-      
-      console.log("distracted_len: ", distractedLen)
-      console.log(distracted[distractedLen-1], time)
-      
       const diff = distracted[distractedLen-1] - time
-      console.log("diff: ", diff)
-      
-      const cumulativeAvg = diff - (avgDiff) / (distractedLen + 1)
-      console.log("cumulativeAvg: ", cumulativeAvg)
-      
+      const cumulativeAvg = diff - (avgDiff) / (distractedLen + 1) 
       setAvgDiff(cumulativeAvg)
 
+    } else {
+      
+      const cumulativeAvg = (settings[flowState]*60 - time) / (distractedLen + 1) 
+      setAvgDiff(cumulativeAvg)
     }
 
     const newDistracted = [...distracted, time]
@@ -167,24 +144,29 @@ export default function PomodoroClock({settings}) {
             </>
           ) : (
             <>
-              {flowState === "pomodoro" ? <Button variant="default" onClick={() => signalDistracted()}>Distracted</Button> : null }
+              {flowState === "pomodoro" ? <Button variant="default" onClick={() => signalDistracted()}>I got distracted</Button> : null }
               <Button variant="outline" onClick={() => stopTimer()}>Stop Timer</Button>
             </>
           )
         }
       </div>
       <div className="flex flex-col items-center justify-center">
-        <p>Your attention span is approximately <b>{Math.round(avgDiff).toString()} seconds</b></p>
-        {distracted && distracted.length > 0 ? <div className="flex flex-row space-x-2 max-w-screen-sm p-2 overflow-x-auto">
-          {distracted.map((t, i) => {
-            return (
-              <div key={`${t}-${i}`} className="p-2 border rounded-md border-gray-500">
-                {makeClock(t)}
-              </div>
-              )
-          })}
+        
+        {distracted && distracted.length > 0 ? (
+          <>
+          <p>Your attention span is approximately <b>{Math.round(avgDiff).toString()} seconds</b></p>
+          <div className="flex flex-row space-x-2 max-w-screen-sm p-2 overflow-x-auto">
+            {distracted.map((t, i) => {
+              return (
+                <div key={`${t}-${i}`} className="p-2 border rounded-md border-gray-500">
+                  {makeClock(t)}
+                </div>
+                )
+            })}
+          </div>
+          </>
           
-        </div> : null}
+        ) : null}
         
       </div>
       
