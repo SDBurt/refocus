@@ -20,6 +20,22 @@ const makeClock = (t: number) => {
 }
 
 
+const sortEpochs = (epochs: number[]): number[] => {
+  return epochs.sort((n1,n2) => n1 - n2);
+}
+
+const averageDifference = (sortedEpochs: number[]): number => {
+
+  const num_epochs = sortedEpochs.length
+
+  for (let i = 0; i < num_epochs-1; i++) {
+    const diff = sortedEpochs[i+1] - sortedEpochs[i]
+
+  }
+
+  return 0
+}
+
 
 export default function PomodoroClock({settings}) {
 
@@ -30,11 +46,13 @@ export default function PomodoroClock({settings}) {
   const [numPomosBeforeLongBreak, setNumPomosBeforeLongBreak] = useState(defaultPomoIntervals)
   
   const [distracted, setDistracted] = useState([])
+  const [avgDiff, setAvgDiff] = useState<number>(0.0)
 
   const resetTimer = () => {
     setTimerRunning(false)
     setTime(parseInt(settings[flowState])*60)
     setDistracted([])
+    setAvgDiff(0)
   }
   const stopTimer = () => {
     setTimerRunning(false)
@@ -49,7 +67,30 @@ export default function PomodoroClock({settings}) {
   }
 
   const signalDistracted = () => {
-    setDistracted(prev => ([...prev, time]))
+    
+    // const newDistracted = [...distracted, time]
+    const distractedLen = distracted.length
+
+    console.log("First: ", time, avgDiff,  distractedLen)
+
+    if (distractedLen > 1) {
+      
+      console.log("distracted_len: ", distractedLen)
+      console.log(distracted[distractedLen-1], time)
+      
+      const diff = distracted[distractedLen-1] - time
+      console.log("diff: ", diff)
+      
+      const cumulativeAvg = diff - (avgDiff) / (distractedLen + 1)
+      console.log("cumulativeAvg: ", cumulativeAvg)
+      
+      setAvgDiff(cumulativeAvg)
+
+    }
+
+    const newDistracted = [...distracted, time]
+    setDistracted(newDistracted)
+
   }
 
   const onTimerComplete = () => {
@@ -89,59 +130,65 @@ export default function PomodoroClock({settings}) {
   return (
     <div className="flex flex-col space-y-6 items-center">
 
-          <div className="flex flex-row space-x-2">
-            <Button variant={flowState === "pomodoro" ? "default" : "outline"} onClick={() => newFlowState("pomodoro")}>Pomodoro</Button>
-            <Button variant={flowState === "shortBreak" ? "default" : "outline"} onClick={() => newFlowState("shortBreak")}>Short Break</Button>
-            <Button variant={flowState === "longBreak" ? "default" : "outline"} onClick={() => newFlowState("longBreak")}>Long Break</Button>
-          </div>
+      <div className="flex flex-row space-x-2">
+        <Button variant={flowState === "pomodoro" ? "default" : "outline"} onClick={() => newFlowState("pomodoro")}>Pomodoro</Button>
+        <Button variant={flowState === "shortBreak" ? "default" : "outline"} onClick={() => newFlowState("shortBreak")}>Short Break</Button>
+        <Button variant={flowState === "longBreak" ? "default" : "outline"} onClick={() => newFlowState("longBreak")}>Long Break</Button>
+      </div>
 
-          {/* Title */}
-          
-          {/* Subtitle with details */}
-          <div className="text-md font-semibold text-slate-800 dark:text-slate-600">
-            {/* <p className="text-sm text-slate-500 dark:text-slate-400">
-              {stateFlow[flowState].description}
-            </p> */}
-            {/* <p className="text-sm text-slate-500 dark:text-slate-400">
-              long break in {numPomosBeforeLongBreak} pomodoros
-            </p> */}
-          </div>
+      {/* Title */}
+      
+      {/* Subtitle with details */}
+      {/* <div className="text-md font-semibold text-slate-800 dark:text-slate-600">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          {stateFlow[flowState].description}
+        </p> 
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          long break in {numPomosBeforeLongBreak} pomodoros
+        </p> 
+      </div> */}
 
-          {/* Clock */}
-          <div className="text-8xl font-semibold text-slate-700 dark:text-slate-400">
-            <div className="text-center text-4xl font-semibold text-slate-700 dark:text-slate-400">
-              {stateFlow[flowState].label}
-            </div>
-            {makeClock(time)}
-          </div>
+      {/* Clock */}
+      <div className="text-8xl font-semibold text-slate-700 dark:text-slate-400">
+        <div className="text-center text-4xl font-semibold text-slate-700 dark:text-slate-400">
+          {stateFlow[flowState].label}
+        </div>
+        {makeClock(time)}
+      </div>
 
-          {/* Button Group */}
-          <div className="flex gap-2">
-            
-            {
-              !timerRunning ? (
-                <>
-                  <Button onClick={() => startTimer()}>Start Timer</Button>
-                  <Button variant="outline" onClick={() => resetTimer()}>Reset</Button>
-                </>
-              ) : (
-                <>
-                  {flowState === "pomodoro" ? <Button variant="default" onClick={() => signalDistracted()}>Distracted</Button> : null }
-                  <Button variant="outline" onClick={() => stopTimer()}>Stop Timer</Button>
-                </>
+      {/* Button Group */}
+      <div className="flex gap-2">
+        
+        {
+          !timerRunning ? (
+            <>
+              <Button onClick={() => startTimer()}>Start Timer</Button>
+              <Button variant="outline" onClick={() => resetTimer()}>Reset</Button>
+            </>
+          ) : (
+            <>
+              {flowState === "pomodoro" ? <Button variant="default" onClick={() => signalDistracted()}>Distracted</Button> : null }
+              <Button variant="outline" onClick={() => stopTimer()}>Stop Timer</Button>
+            </>
+          )
+        }
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <p>Your attention span is approximately <b>{Math.round(avgDiff).toString()} seconds</b></p>
+        {distracted && distracted.length > 0 ? <div className="flex flex-row space-x-2 max-w-screen-sm p-2 overflow-x-auto">
+          {distracted.map((t, i) => {
+            return (
+              <div key={`${t}-${i}`} className="p-2 border rounded-md border-gray-500">
+                {makeClock(t)}
+              </div>
               )
-            }
-          </div>
-          {distracted && distracted.length > 0 ? <div className="flex flex-row space-x-2 max-w-screen-sm p-2 overflow-x-auto">
-            {distracted.map(t => {
-              return (
-                <div className="p-2 border rounded-md border-gray-500">
-                  {makeClock(t)}
-                </div>
-                )
-            })}
-          </div> : null}
+          })}
+          
+        </div> : null}
+        
+      </div>
+      
 
-          </div>
+    </div>
   )
 }
