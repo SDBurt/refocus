@@ -20,11 +20,9 @@ const makeClock = (t: number) => {
 }
 
 
-export default function PomodoroClock({settings}) {
+export default function PomodoroClock({settings, time, startClock, stopClock, resetClock, clockRunning}) {
 
   // Timer
-  const [time, setTime] = useState(parseInt(settings[defaultState])*60)
-  const [timerRunning, setTimerRunning] = useState(false)
   const [flowState, setFlowState] = useState<FlowStateType>(defaultState)
   const [numPomosBeforeLongBreak, setNumPomosBeforeLongBreak] = useState(defaultPomoIntervals)
   
@@ -32,21 +30,21 @@ export default function PomodoroClock({settings}) {
   const [avgDiff, setAvgDiff] = useState<number>(0.0)
 
   const resetTimer = () => {
-    setTimerRunning(false)
-    setTime(parseInt(settings[flowState])*60)
+    resetClock(parseInt(settings[flowState]))
+
     setDistracted([])
     setAvgDiff(0)
   }
   const stopTimer = () => {
-    setTimerRunning(false)
+    stopClock()
   }
   const startTimer = () => {
-    setTimerRunning(true)
+    startClock()
   }
 
   const newFlowState = (state) => {
     setFlowState(state)
-    setTime(parseInt(settings[state])*60)
+    resetClock(parseInt(settings[state]))
   }
 
   const signalDistracted = () => {
@@ -73,9 +71,6 @@ export default function PomodoroClock({settings}) {
   const onTimerComplete = () => {
     
     const nextState = stateFlow[flowState].next as FlowStateType
-    setTimerRunning(false)
-    setTime(settings[nextState]*60 || stateFlow[nextState].defaultTime*60)
-    
     if (flowState === 'pomodoro') {
       setFlowState(numPomosBeforeLongBreak <= 0 ? 'longBreak' : 'shortBreak')
       setNumPomosBeforeLongBreak(prev => {
@@ -87,22 +82,13 @@ export default function PomodoroClock({settings}) {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (timerRunning) {
-        if (time > 0) {
-          setTime(time - 1);
-        } else if (time === 0) {
-
-          clearInterval(interval);
-          onTimerComplete()
-          if (settings["autoStartTimer"]) {
-            startTimer()
-          }
-        }
+    if (clockRunning && time <= 0) {  
+      onTimerComplete()
+      if (settings["autoStartTimer"]) {
+        startTimer()
       }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [timerRunning, time]);
+    }
+  }, [clockRunning, time]);
 
   return (
     <div className="flex flex-col space-y-6 items-center">
@@ -137,7 +123,7 @@ export default function PomodoroClock({settings}) {
       <div className="flex gap-2">
         
         {
-          !timerRunning ? (
+          !clockRunning ? (
             <>
               <Button onClick={() => startTimer()}>Start Timer</Button>
               <Button variant="outline" onClick={() => resetTimer()}>Reset</Button>

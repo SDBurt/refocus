@@ -10,7 +10,7 @@ export default function IndexPage() {
   return (
     <Layout>
       <Head>
-        <title>{siteConfig.name}</title>
+        <title>{siteConfig.name} - time</title>
         <meta
           name="description"
           content={siteConfig.description}
